@@ -168,7 +168,7 @@ class TcpReceiveQueue extends cObject
     ReorderBuffer reorderBuffer;
 }
 
-class TcpConnection extends cObject
+class TcpConnection extends cSimpleModule
 {
     @existingClass;
     @descriptor(readonly);
