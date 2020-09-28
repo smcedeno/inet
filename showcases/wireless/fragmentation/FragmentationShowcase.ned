@@ -3,6 +3,7 @@ package inet.showcases.wireless.fragmentation;
 
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
 import inet.node.inet.AdhocHost;
+import inet.physicallayer.common.packetlevel.NoiseSource;
 import inet.physicallayer.ieee80211.packetlevel.Ieee80211ScalarRadioMedium;
 import inet.visualizer.integrated.IntegratedVisualizer;
 
@@ -28,3 +29,10 @@ network FragmentationShowcase
         }
 }
 
+network FragmentationNoise extends FragmentationShowcase
+{
+    submodules:
+        noiseSource: NoiseSource {
+            @display("p=334,151");
+        }
+}
