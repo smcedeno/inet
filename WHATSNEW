@@ -1,5 +1,199 @@
+new socket processing components for ethernet and LLC
+ socket handler
+ socket table
+ socket packet processor
+
+Enter_Method_Silent -> Enter_Method
+
 Recent changes in the INET Framework
 ====================================
+
+INET-4.3 (December 2020) - Stable
+---------------------------------
+
+This is a new minor stable release of the INET 4.x branch. This version includes
+a few important new features, some backward incompatible changes, a number of small
+improvements, and several bug fixes. This version requires OMNeT++ 6.0preview9 or later.
+
+Notable backward incompatible changes are the following:
+
+1. Packet API
+   shared pointers for tags, no more delete removeTag
+
+2. mobility
+   return const references where possible for efficiency
+
+3. radio medium analog model
+   orientation, position uses const refernce where possible for efficiency
+
+4. Ethernet
+   linklayer/physicallayer layered Ethernet model
+   parameter changes
+     Ethernet duplex mode
+   refactoring
+     EtherMacBase, EtherMac, EtherMacFullDuplex, EtherBus, WireJunction
+     EthernetMacProtocolDissector, EthernetMacProtocolPrinter
+     MacRelayUnitBase, MacRelayUnit, Ieee8021dRelay
+   ethernet physical layer
+   WireJunction
+   WirelessSignal and Signal seperation, why no WiredSignal??
+
+5. TCP
+   DC-TCP flavour
+   better ECN support
+   window handling
+
+6. 802.1Q
+   extended
+     LinkLayerNodeBase with separate optional IEEE 802.3 and IEEE 803.1q protocols
+
+   other layered models: added headers, protocol printers, dissectors, inserters, checkers
+     IEEE 802
+     IEEE 802.1q
+     IEEE 802.1ae
+
+7. VLAN
+   VLAN req/ind filter, VLAN req mapper, VirtualInterface, VirtualTunnel; vlan vs virt
+   vlan[] -> virt[]
+
+8. Renames
+   InterfaceEntry -> NetworkInterface
+   packetPopped -> packetPulled, popPacket -> pullPacket and the like
+   protocols: ieee8022 -> ieee8022llc
+   int64 -> int64_t and alike
+
+9. Removed models
+   NetAnimTrace
+   PacketDump
+   EtherBus
+   Ieee8021qEncap
+   Queueing model: IPacketQueueingElement, PacketQueueingElementBase
+
+Notable backward compatible changes are the following:
+
+1. Packet API
+   added replace, update API
+   more complete remove and insert API
+   added packet level region tags
+   replaced TagSet with SharedTagSet and RegionTagSet with SharedRegionTagSet, 
+   added EncryptedChunk
+   implemented efficient parsim support (parsimPack/parsimUnpack)
+   added support for dissector packet protocol tag offset
+
+2. Clock model
+   ClockUserModuleBase, ClockUserModuleMixin
+   add clock support to a few models: UdpBasicApp, InterPacketGap, TransmitterBase, PeriodicGate
+
+3. Packet flow and timing measurements
+   packet event, packet flow, packet timing, packet flow visualizer, FlowTag, TimeTag
+   IdentityTag, bit identity tracking
+   packetFlowStarted, packetFlowEnded
+
+3. Queueing model
+   added packet streaming API
+   enqueuePacket, dequeuePacket
+   pushPacketStart, pushPacketEnd, pushPacketProgress, pullPacketStart, pullPacketEnd, pullPacketProgress
+   PacketFilterBase, PacketSchedulerBase, PacketClassifierBase, PacketDuplicatorBase, PacketProcessorBase
+   many queueing model elements support pushing and pulling MarkovClassifier, MarkovScheduler
+   many queueing model elements support streaming PacketMultiplexer, PacketDemultiplexer
+   PacketProcessorBase, InstantServer, ActivePacketSourceBase, PassivePacketSourceBase, PacketGate, PeriodicGate, DynamicClassifier, ActivePacketSinkBase, PassivePacketSourceBase
+   PacketPusherBase, PacketPullerBase, PacketGateBase, PacketFlowBase
+   IPacketProcessor, IPacketPusher, IPacketPuller, IPacketGate, IPacketQueue, IPacketFlow
+   PreemptableStreamer, PreemptingServer, FragmentTag
+
+4. new protocol support model
+
+5. visualizer
+   spectrum visualizer
+   PacketFlow*Visualizer
+   MediumCanvasVisualizer with better spectrum/spectogram visualization
+   Rasterized2DFunction, LeftCurryingFunction, RightCurryingFunction, PeriodicallyInterpolated2DFunction
+   minnan/maxnan
+
+6. new features (.oppfeatures):
+   clock support
+   IEEE 802.2
+   queueing
+   queueing tutorial
+   protocol support
+   protocol tutorial
+   emulation showcase
+
+7. new examples and new showcases
+   clock
+   layered Ethernet interface
+   preemption
+   cut-through
+   gating
+   DC-TCP
+   timing
+   spectrum visualization
+   analog model
+   videostreaming
+   updated examples
+     largenet
+     IEEE 802.1d
+     vlan
+
+8. Documentation
+   new chapters in the user's guide
+     clock model
+     collecting results
+   updated chapters in the user's guide
+     queueing
+     emulation
+
+9. Printing formatted output EV
+   added formatting
+   better str() methods
+   new EV_FIELD, EV_ENDL macros
+   IPrintableObject moved to common and added template support for printing objects and default shift operator
+
+10. Testing
+   fingerprinttest
+     multiple fingerprints, fingerprint calculator option
+   new tests
+     clock model
+     protocol support
+     EV printing and formatting
+
+11. Bug fixes
+   TCP nagle
+   VoipStream
+   Units division and other operators, integral type selection/promotion
+
+12. Cleanup
+   uniform headergurads
+   whitespace cleanup, removed trailing spaces, replaced tabs to spaces
+   code formatting
+   added official GPL-2, GPL-3
+   updated file copyright headers
+
+13. Other changes
+
+    extended IProtocolRegistrationListenger for protocol group, any protocol: DefaultProtocolRegistrationListener, TransparentProtocolRegistrationListener
+    added OperationalMixin
+    added network base modules NetworkBase, WiredNetworkBase, WirelessNetworkBase
+    ModuleRef...
+    OmittedModule, submodule autolayout
+    ProtocolTag, front/back offset extension
+
+    New initialization stages: INITSTAGE_CLOCK, INITSTAGE_NETWORK_LAYER_PROTOCOLS
+
+    IPcapWriter, PcapngWriter, PcapWriter, PcapReader
+    PCAP recorded included in networks, network nodes, network interfaces
+
+    more complete Ipv6HeaderSerializer, DsdvHelloSerializer
+
+    FingerprintCalculator
+
+    extended the use transmissionStared/transmissionEnded, receptionStarted/receptionEnded to wired models
+
+    followed omnet changes
+      rescheduleAt, scheduleAfter
+      forceTransmissionFinishTime
+
+    MessageDispatcher for packet streaming, better circle detection
 
 INET-4.2 (January 2020) - Stable
 --------------------------------

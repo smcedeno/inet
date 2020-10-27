@@ -2,6 +2,8 @@ rename timing -> flow, PacketFlowMeasurementStarter, etc.
 AccessoryProtocols chapter
 
 review new examples preemption, cutthrough, gating, vlan
+review/refactor socket table, handler and socket command processor components
+review protocol folder name, something else?
 
 INET 4.3 release TODO items:
 
